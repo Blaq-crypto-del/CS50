@@ -10,44 +10,51 @@
 
 int main(int argc, string argv[])
 {
-    if (argc != 2)
+    if (argc == 2 && isdigit(*argv[1]))
     {
         printf("Usage: ./caesar key\n");
         return 1;
-    }
-    int k = atoi(argv[1]);
-    if (k < 0)
-    {
-        printf("Usage: ./caesar key\n");
-        return 2;
-    }
-
-    string text = get_string("Text: ");
-
-    printf("ciphertext: ");
-
-    for (int i = 0, n = strlen(text); i < n; i++)
-    {
-        if (isalpha(text[i]))
+  
+       // for error "handles non-numeric key"
+        for (int i = 0, n = strlen(argv[1]); i < n; i++)
         {
-            if (isupper(text[i]))
+            int x = argv[1][i];
+            // Returns error message if key includes anything other than digits
+            if (x == 0 || !isdigit(x))
             {
-                char cipher_num_capital = ((text[i] - 65 + k) % 26) + 65;
-                printf("%c", cipher_num_capital);
-            }
-
-            if (islower(text[i]))
-            {
-                char cipher_num_small = ((text[i] - 97 + k) % 26) + 97;
-                printf("%c", cipher_num_small);
+                printf("Usage: ./caesar key\n");
+                return 1;
             }
         }
-        else
+
+        string plainText = get_string("plaintext: "); //asking a user for a plaintext
+        printf("ciphertext: "); // printing ciphertext
+        int key = atoi(argv[1]); //atoi to change string value in argv to an integer
+
+
+        for (int i = 0, b = strlen(plainText); i < b; i++) //checking every letter
         {
-            printf("%c", text[i]);
+            if (plainText[i] >= 'a' && plainText[i] <= 'z') //checking lowercase
+            {
+                printf("%c", (((plainText[i] - 'a') + key) % 26) + 'a'); // printing lowercase
+            }
+            else if (plainText[i] >= 'A' && plainText[i] <= 'Z') // checking uppercase
+            {
+                printf("%c", (((plainText[i] - 'A') + key) % 26) + 'A'); // printing uppercase
+            }
+            else
+            {
+                printf("%c", plainText[i]); // any punctuations
+            }
+
         }
+        printf("\n");
+        return 0;
     }
 
-    printf("\n");
-    return 0;
+    else
+    {
+        printf("Usage: ./caesar key\n"); //if conditions are wrong
+        return 1;
+    }
 }
